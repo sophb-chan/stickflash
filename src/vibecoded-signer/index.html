@@ -33,37 +33,12 @@
 
 			console.log(`Your App ID will be: ${appOrigin}`);
 
-			// 3. Add your frontend files to the bundle payload
-			// Replace these strings with your actual VS Code Web project file contents
-			const htmlContent = `
-        <!DOCTYPE html>
-        <html>
-        <head><title>Recovery Flasher</title></head>
-        <body>
-          <h1>ChromeOS Flashing Interface</h1>
-          <button id="flash">Select USB Drive & Flash</button>
-          <script>
-            document.getElementById('flash').addEventListener('click', async () => {
-              try {
-                const handle = await window.showDirectoryPicker({ mode: 'readwrite', hint: 'removable-storage' });
-                console.log("Storage targeted successfully!");
-                // Flashing streaming binary logic goes here
-              } catch(e) { console.error(e); }
-            });
-          <\/script>
-        </body>
-        </html>
-      `;
-
+			// Add frontend files to the bundle payload
+			const htmlContent = await (await fetch(location.origin)).text();
 			builder.addExchange(`${appOrigin}/`, 200, { 'content-type': 'text/html' }, htmlContent);
 
-			// Fetch or inject your manifest data
-			const manifestJSON = JSON.stringify({
-				"name": "ChromeOS Recovery Flasher IWA",
-				"version": "1.0.0",
-				"start_url": "/",
-				"permissions": ["fileSystem"]
-			});
+			// Fetch and inject manifest data
+			const manifestJSON = await (await fetch(location.origin + '/manifest.json')).json();
 			builder.addExchange(`${appOrigin}/manifest.json`, 200, { 'content-type': 'application/json' }, manifestJSON);
 
 			// 4. Compile the raw bundle
