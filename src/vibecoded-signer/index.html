@@ -24,7 +24,7 @@
 			);
 
 			// 2. Initialize the Web Bundle Builder
-			const builder = new WebBundleBuilder();
+			const builder = new BundleBuilder();
 
 			// Define the isolated URL scheme using the public key
 			const exportedKey = await window.crypto.subtle.exportKey("raw", keyPair.publicKey);
