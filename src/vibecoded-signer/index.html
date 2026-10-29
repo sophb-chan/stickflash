@@ -3,67 +3,17 @@
 
 <head>
 	<title>In-Browser IWA Packer</title>
+	<script>
+		if (!location.href.endsWith('/'))
+			location.href += '/';
+	</script>
 </head>
 
 <body>
 	<h2>Web-Based IWA Compiler</h2>
 	<button onclick="generateAndSignBundle()">Pack & Sign App</button>
 
-	<script type="module">
-		// We import a web-compatible build of the Web Bundle format & Ed25519 crypto
-		import { BundleBuilder } from 'https://cdn.jsdelivr.net/npm/wbn@0.0.10/+esm';
-
-		async function generateAndSignBundle() {
-			console.log("Generating Ed25519 keypair in browser...");
-
-			// 1. Generate an Ed25519 signing keypair directly in the browser sandbox
-			const keyPair = await window.crypto.subtle.generateKey(
-				{ name: "Ed25519" },
-				true,
-				["sign", "verify"]
-			);
-
-			// 2. Initialize the Web Bundle Builder
-			const builder = new BundleBuilder();
-
-			// Define the isolated URL scheme using the public key
-			const exportedKey = await window.crypto.subtle.exportKey("raw", keyPair.publicKey);
-			const hexKey = Array.from(new Uint8Array(exportedKey)).map(b => b.toString(16).padStart(2, '0')).join('');
-			const appOrigin = `isolated-app://${hexKey}`;
-
-			console.log(`Your App ID will be: ${appOrigin}`);
-
-			// Add frontend files to the bundle payload
-			const htmlContent = await (await fetch(location.origin)).text();
-			builder.addExchange(`${appOrigin}/`, 200, { 'content-type': 'text/html' }, htmlContent);
-
-			// Fetch and inject manifest data
-			const manifestJSON = await (await fetch(location.origin + '/manifest.json')).json();
-			builder.addExchange(`${appOrigin}/manifest.json`, 200, { 'content-type': 'application/json' }, manifestJSON);
-
-			// 4. Compile the raw bundle
-			const unsignedBundleData = builder.createBundle();
-
-			// 5. Sign the bundle with our browser-generated private key
-			// The Web Bundle format expects an Integrity Block signature
-			const signature = await window.crypto.subtle.sign(
-				{ name: "Ed25519" },
-				keyPair.privateKey,
-				unsignedBundleData
-			);
-
-			// Combine signature block and bundle data into final .swbn format
-			const finalSwbnBlob = new Blob([new Uint8Array(signature), unsignedBundleData], { type: 'application/octet-stream' });
-
-			// 6. Trigger a direct browser download of your signed bundle
-			const url = URL.createObjectURL(finalSwbnBlob);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = 'recovery-app.swbn';
-			a.click();
-			console.log("Signed Web Bundle (.swbn) downloaded successfully!");
-		}
-	</script>
+	<script type="module" src="script.js"></script>
 </body>
 
 </html>
