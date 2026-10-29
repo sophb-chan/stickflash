@@ -21,6 +21,7 @@ async function getRecoveries(board, channel = 'all') {
 		item.chromeVersion = imageTableItem.querySelector('td[data-field=chrome_version]').textContent.trim();
 		item.platformVersion = imageTableItem.querySelector('td[data-field=platform_version]').textContent.trim();
 		item.downloadURL = imageTableItem.querySelector('td:not([data-field]) a[href]').href;
+		item.kernelVersion = parseInt(imageTableItem.querySelector('td.extra_cell p').textContent) || null;
 		recoveryLinks.push(item);
 	}
 	return recoveryLinks;
