@@ -1,8 +1,0 @@
-{
-    "scripts": {
-        "build": "npm i jsdom; node build/create_boardlookup.js; node build/download_recovery2.js"
-    },
-    "dependencies": {
-        "jsdom": "^29.1.1"
-    }
-}
