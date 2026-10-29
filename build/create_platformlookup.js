@@ -70,7 +70,6 @@ async function getChromeToPlatformMap() {
     for (const board of boards) {
         chromeToPlatformMap[board] ??= {};
         const recoveryPage = await new DOMNavigator(`https://cros.download/recovery/${board}`);
-
     }
     return boardToModelMap;
 }
