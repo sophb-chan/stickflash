@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const fileURL = 'https://dl.google.com/dl/edgedl/chromeos/recovery/recovery2.json';
-const targetPath = path.join(process.cwd(), 'src/recovery2.json');
+const targetPath = path.join(process.cwd(), 'public/recovery2.json');
 
 async function downloadFile(attempts = 0) {
 	// delete file if needed to ensure fresh content on download
