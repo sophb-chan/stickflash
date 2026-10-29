@@ -76,7 +76,7 @@ async function getBoardToModelMap() {
 async function generateBoardToModelMapFile() {
     console.log('Generating board to model map file...');
     // delete file if it exists to ensure fresh content
-    const targetPath = path.join(process.cwd(), 'public/board_to_model.json');
+    const targetPath = path.join(process.cwd(), '/public/board_to_model.json');
     if (fs.existsSync(targetPath)) {
 		fs.unlinkSync(targetPath);
 	}
