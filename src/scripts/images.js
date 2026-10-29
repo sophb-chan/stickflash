@@ -20,7 +20,7 @@ async function getRecoveries(board, channel = 'all') {
 		const item = {};
 		item.chromeVersion = imageTableItem.querySelector('td[data-field=chrome_version]').textContent.trim();
 		item.platformVersion = imageTableItem.querySelector('td[data-field=platform_version]').textContent.trim();
-		item.downloadURL = imageTableItem.querySelector('td:not([data-field])').trim();
+		item.downloadURL = imageTableItem.querySelector('td:not([data-field]) a[href]').href;
 		recoveryLinks.push(item);
 	}
 	return recoveryLinks;
