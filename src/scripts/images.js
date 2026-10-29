@@ -15,12 +15,12 @@ async function getRecoveries(board, channel = 'all') {
 		throw new ReferenceError(`Unknown channel "${channel}"`);
 
 	const recoveryLinks = [];
-	const imageTableItems = [...document.querySelectorAll('#images_table tbody tr')];
+	const imageTableItems = [...DOM.querySelectorAll('#images_table tbody tr')];
 	for (const imageTableItem of imageTableItems) {
 		const item = {};
-		item.chromeVersion = imageTableItem.querySelector('td[data-field=chrome_version]').textContent;
-		item.platformVersion = imageTableItem.querySelector('td[data-field=platform_version]').textContent;
-		item.downloadURL = imageTableItem.querySelector('td:not([data-field])');
+		item.chromeVersion = imageTableItem.querySelector('td[data-field=chrome_version]').textContent.trim();
+		item.platformVersion = imageTableItem.querySelector('td[data-field=platform_version]').textContent.trim();
+		item.downloadURL = imageTableItem.querySelector('td:not([data-field])').trim();
 		recoveryLinks.push(item);
 	}
 	return recoveryLinks;
