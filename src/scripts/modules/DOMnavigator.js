@@ -1,8 +1,23 @@
 class DOMNavigator {
+	static cached = {};
+	static cacheLimitTime = 60e3 * 5; // 5 minutes
+
 	async loadFromURL(webpageURL) {
-		// fetch website content
-		const documentFetchResponse = await fetch(webpageURL);
-		const documentContent = await documentFetchResponse.text();
+		if (
+			this.constructor.cached[webpageURL] == null
+			||
+			Date.now() - this.constructor.cached[webpageURL]?.cacheTime > this.constructor.cacheLimitTime
+		) {
+			// fetch website content
+			const documentFetchResponse = await fetch(webpageURL);
+			const documentContent = await documentFetchResponse.text();
+			this.constructor.cached[webpageURL] = {
+				cacheTime: Date.now(),
+				content: documentContent,
+			};
+		}
+		// get cached content
+		const documentContent = this.constructor.cached[webpageURL].content;
 
 		// check if content is valid HTML
 		const parser = new DOMParser();

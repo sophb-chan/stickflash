@@ -9,7 +9,7 @@ async function getRecoveries(board, channel = 'all') {
 	const DOM = await new DOMNavigator(`https://cros.download/recovery/${board}`);
 	const channels = [
 		...DOM.getElementById('channel_select').children
-	].slice(1).map(element => element.value.toLowerCase());
+	].map(element => element.value.toLowerCase());
 
 	if (!channels.includes(channel))
 		throw new ReferenceError(`Unknown channel "${channel}"`);
