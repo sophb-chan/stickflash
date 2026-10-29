@@ -7,9 +7,10 @@ async function getRecoveries(board, channel = 'all') {
 		throw new ReferenceError(`Unknown board "${board}"`);
 
 	const DOM = await new DOMNavigator(`https://cros.download/recovery/${board}`);
-	const channels = DOM.getElementById('channel_select').children
-		.slice(1)
-		.map(element => element.value.toLowerCase());
+	const channels = [
+		...DOM.getElementById('channel_select').children
+	].slice(1).map(element => element.value.toLowerCase());
+
 	if (!channels.includes(channel))
 		throw new ReferenceError(`Unknown channel "${channel}"`);
 
